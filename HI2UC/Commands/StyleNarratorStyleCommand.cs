@@ -4,19 +4,19 @@ using Nikse.SubtitleEdit.PluginLogic.Strategies;
 
 namespace Nikse.SubtitleEdit.PluginLogic.Commands
 {
-    public class StyleNarratorCommand : ICommand
+    public class StyleNarratorStyleCommand : IStyleCommand
     {
         private static readonly char[] LineCloseChars = {'!', '?', '¿', '¡'};
         private static readonly char[] Symbols = {'.', '!', '?', ')', ']'};
 
-        public IStrategy Strategy { get; }
+        public ICaseStrategy CaseStrategy { get; }
 
-        public StyleNarratorCommand(IStrategy strategy)
+        public StyleNarratorStyleCommand(ICaseStrategy caseStrategy)
         {
-            Strategy = strategy;
+            CaseStrategy = caseStrategy;
         }
 
-        public void Convert(IList<Paragraph> paragraph, IController controller)
+        public void Convert(IList<Paragraph> paragraph, ICaseController caseController)
         {
             foreach (var p in paragraph)
             {
@@ -24,7 +24,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                 string output = NarratorToUppercase(p.Text);
                 if (!input.Equals(output, StringComparison.Ordinal))
                 {
-                    controller.AddResult(input, output, "Narrator converted", p);
+                    caseController.AddResult(input, output, "Narrator converted", p);
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                     // Find index from original text.
                     colonIdx = line.IndexOf(':') + 1;
                     string preText = line.Substring(0, colonIdx);
-                    preText = Strategy.Execute(preText);
+                    preText = CaseStrategy.Execute(preText);
                     lines[i] = preText + line.Substring(colonIdx);
                 }
             }
@@ -116,7 +116,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                         k++;
                     }
 
-                    string textFromRange = Strategy.Execute(text.Substring(k, j - k));
+                    string textFromRange = CaseStrategy.Execute(text.Substring(k, j - k));
                     text = text.Remove(k, j - k).Insert(k, textFromRange);
                 }
             }

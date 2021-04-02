@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
 using System.Windows.Forms;
 using Nikse.SubtitleEdit.PluginLogic.Commands;
 using Nikse.SubtitleEdit.PluginLogic.Strategies;
@@ -26,8 +25,6 @@ namespace Nikse.SubtitleEdit.PluginLogic
         //private Context _hearingImpaired;
         private readonly bool _isLoading;
 
-        private IStrategy _strategy = new TitlecaseStrategy();
-
         public PluginForm(Subtitle subtitle, string name, string description)
         {
             InitializeComponent();
@@ -38,7 +35,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
             Text = $@"{name} - v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString(2)}";
 
             _subtitle = subtitle;
-            labelDesc.Text = "Description: " + description;
+            labelDesc.Text = @"Description: " + description;
 
             LoadConfigurations();
             FormClosed += (s, e) =>
@@ -76,50 +73,50 @@ namespace Nikse.SubtitleEdit.PluginLogic
             };
              */
 
-            buttonNext.Click += (sender, e) =>
+            //buttonNext.Click += delegate
             {
-                if (listViewFixes.Items.Count == 0 || listViewFixes.SelectedItems.Count == 0)
-                {
-                    return;
-                }
+                //if (listViewFixes.Items.Count == 0 || listViewFixes.SelectedItems.Count == 0)
+                //{
+                //    return;
+                //}
 
-                ListViewItem lvi = listViewFixes.SelectedItems[0];
-                int nextIdx = lvi.Index + 1;
-                // handle boundary
-                if (nextIdx == listViewFixes.Items.Count)
-                {
-                    nextIdx = 0;
-                }
+                //ListViewItem lvi = listViewFixes.SelectedItems[0];
+                //int nextIdx = lvi.Index + 1;
+                //// handle boundary
+                //if (nextIdx == listViewFixes.Items.Count)
+                //{
+                //    nextIdx = 0;
+                //}
 
-                lvi.Selected = false;
-                listViewFixes.Select();
-                listViewFixes.Items[nextIdx].EnsureVisible();
-                listViewFixes.Items[nextIdx].Selected = true;
+                //lvi.Selected = false;
+                //listViewFixes.Select();
+                //listViewFixes.Items[nextIdx].EnsureVisible();
+                //listViewFixes.Items[nextIdx].Selected = true;
             };
 
-            buttonPrev.Click += (sender, e) =>
+            //buttonPrev.Click += delegate
             {
-                if (listViewFixes.Items.Count == 0 || listViewFixes.SelectedItems.Count == 0)
-                {
-                    return;
-                }
+                //if (listViewFixes.Items.Count == 0 || listViewFixes.SelectedItems.Count == 0)
+                //{
+                //    return;
+                //}
 
-                ListViewItem lvi = listViewFixes.SelectedItems[0];
-                int preIdx = lvi.Index - 1;
-                // handle boundary
-                if (preIdx < 0)
-                {
-                    preIdx = listViewFixes.Items.Count - 1;
-                }
+                //ListViewItem lvi = listViewFixes.SelectedItems[0];
+                //int preIdx = lvi.Index - 1;
+                //// handle boundary
+                //if (preIdx < 0)
+                //{
+                //    preIdx = listViewFixes.Items.Count - 1;
+                //}
 
-                lvi.Selected = false;
-                listViewFixes.Select();
-                listViewFixes.Items[preIdx].EnsureVisible();
-                listViewFixes.Items[preIdx].Selected = true;
+                //lvi.Selected = false;
+                //listViewFixes.Select();
+                //listViewFixes.Items[preIdx].EnsureVisible();
+                //listViewFixes.Items[preIdx].Selected = true;
             };
 
             // donate handler
-            pictureBoxDonate.Click += (s, e) => { Process.Start(StringUtils.DonateUrl); };
+            pictureBoxDonate.Click += delegate { Process.Start(StringUtils.DonateUrl); };
         }
 
         private void LinkLabel1_DoubleClick(object sender, EventArgs e)
@@ -129,32 +126,19 @@ namespace Nikse.SubtitleEdit.PluginLogic
 
         private void UpdateUiFromConfigs(HiConfigs configs)
         {
-            checkBoxSingleLineNarrator.Checked = configs.SingleLineNarrator;
             checkBoxRemoveSpaces.Checked = configs.RemoveExtraSpaces;
             checkBoxNames.Checked = configs.NarratorToUppercase;
             checkBoxMoods.Checked = configs.MoodsToUppercase;
-
-            // todo: clean up
-            // for (int i = 0; i < comboBoxStyle.Items.Count; i++)
-            // {
-            //     var cbi = (ComboBoxItem) comboBoxStyle.Items[i];
-            //     if (cbi.Style == configs.Style)
-            //     {
-            //         //MessageBox.Show($"Test {i}");
-            //         comboBoxStyle.SelectedIndex = i;
-            //         break;
-            //     }
-            // }
         }
 
         private void InitComboBoxHiStyle()
         {
-            comboBoxStyle.Items.Add(new NoneStrategy());
-            comboBoxStyle.Items.Add(new TitlecaseStrategy());
-            comboBoxStyle.Items.Add(new UppercaseStrategy());
-            comboBoxStyle.Items.Add(new LowercaseStrategy());
-            comboBoxStyle.Items.Add(new UpperLowercase());
-            comboBoxStyle.Items.Add(new TitleWordsStrategy());
+            comboBoxStyle.Items.Add(new NoneCaseStrategy());
+            comboBoxStyle.Items.Add(new SentenceCaseStrategy());
+            comboBoxStyle.Items.Add(new UpperCaseStrategy());
+            comboBoxStyle.Items.Add(new LowerCaseStrategy());
+            comboBoxStyle.Items.Add(new TongleCaseStrategy());
+            comboBoxStyle.Items.Add(new StartCaseStrategy());
             // set default selected to titlecase
             comboBoxStyle.SelectedIndex = 1;
         }
@@ -193,7 +177,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
                     continue;
                 }
 
-                var record = (Record) listViewItem.Tag;
+                var record = (Record)listViewItem.Tag;
                 record.Paragraph.Text = record.After;
             }
 
@@ -215,54 +199,54 @@ namespace Nikse.SubtitleEdit.PluginLogic
             switch (menuItem.Text)
             {
                 case "Check all":
-                {
-                    for (int i = 0; i < listViewFixes.Items.Count; i++)
                     {
-                        listViewFixes.Items[i].Checked = true;
-                    }
-
-                    break;
-                }
-                case "Uncheck all":
-                {
-                    for (int i = 0; i < listViewFixes.Items.Count; i++)
-                    {
-                        listViewFixes.Items[i].Checked = false;
-                    }
-
-                    break;
-                }
-                case "Invert check":
-                {
-                    for (int i = 0; i < listViewFixes.Items.Count; i++)
-                    {
-                        listViewFixes.Items[i].Checked = !listViewFixes.Items[i].Checked;
-                    }
-
-                    break;
-                }
-                case "Copy":
-                {
-                    string text = ((Paragraph) listViewFixes.FocusedItem.Tag).ToString();
-                    Clipboard.SetText(text, TextDataFormat.UnicodeText);
-                    break;
-                }
-                default:
-                {
-                    for (int idx = listViewFixes.SelectedIndices.Count - 1; idx >= 0; idx--)
-                    {
-                        int index = listViewFixes.SelectedIndices[idx];
-                        if (listViewFixes.Items[idx].Tag is Paragraph p)
+                        for (int i = 0; i < listViewFixes.Items.Count; i++)
                         {
-                            _subtitle.RemoveLine(p.Number);
+                            listViewFixes.Items[i].Checked = true;
                         }
 
-                        listViewFixes.Items.RemoveAt(index);
+                        break;
                     }
+                case "Uncheck all":
+                    {
+                        for (int i = 0; i < listViewFixes.Items.Count; i++)
+                        {
+                            listViewFixes.Items[i].Checked = false;
+                        }
 
-                    _subtitle.Renumber();
-                    break;
-                }
+                        break;
+                    }
+                case "Invert check":
+                    {
+                        for (int i = 0; i < listViewFixes.Items.Count; i++)
+                        {
+                            listViewFixes.Items[i].Checked = !listViewFixes.Items[i].Checked;
+                        }
+
+                        break;
+                    }
+                case "Copy":
+                    {
+                        string text = ((Paragraph)listViewFixes.FocusedItem.Tag).ToString();
+                        Clipboard.SetText(text, TextDataFormat.UnicodeText);
+                        break;
+                    }
+                default:
+                    {
+                        for (int idx = listViewFixes.SelectedIndices.Count - 1; idx >= 0; idx--)
+                        {
+                            int index = listViewFixes.SelectedIndices[idx];
+                            if (listViewFixes.Items[idx].Tag is Paragraph p)
+                            {
+                                _subtitle.RemoveLine(p.Number);
+                            }
+
+                            listViewFixes.Items.RemoveAt(index);
+                        }
+
+                        _subtitle.Renumber();
+                        break;
+                    }
             }
         }
 
@@ -282,25 +266,23 @@ namespace Nikse.SubtitleEdit.PluginLogic
             _hiConfigs.NarratorToUppercase = checkBoxNames.Checked;
             _hiConfigs.MoodsToUppercase = checkBoxMoods.Checked;
             _hiConfigs.RemoveExtraSpaces = checkBoxRemoveSpaces.Checked;
-            _hiConfigs.SingleLineNarrator = checkBoxSingleLineNarrator.Checked;
             // _hiConfigs.Style = ((ComboBoxItem) comboBoxStyle.SelectedItem).Style;
 
             listViewFixes.BeginUpdate();
             listViewFixes.Items.Clear();
 
-            var controller = new Controller();
-            foreach (ICommand command in GetCommands())
+            var controller = new CaseController();
+            foreach (IStyleCommand command in GetCommands())
             {
                 command.Convert(_subtitle.Paragraphs, controller);
             }
 
-            foreach (Record record in controller.Records.OrderBy(r => r.Paragraph.Number))
+            foreach (var record in controller.Records.OrderBy(r => r.Paragraph.Number))
             {
-                var item = new ListViewItem(string.Empty) {Checked = true};
+                var item = new ListViewItem(string.Empty) { Checked = true };
                 item.SubItems.Add(record.Paragraph.Number.ToString());
-                item.SubItems.Add(record.Comment);
-                item.SubItems.Add(record.Before);
-                item.SubItems.Add(record.After);
+                item.SubItems.Add(StringUtils.GetListViewString(record.Before));
+                item.SubItems.Add(StringUtils.GetListViewString(record.After));
                 item.Tag = record;
                 listViewFixes.Items.Add(item);
             }
@@ -335,10 +317,9 @@ namespace Nikse.SubtitleEdit.PluginLogic
 
         private void ListViewFixes_Resize(object sender, EventArgs e)
         {
-            int newWidth = (listViewFixes.Width - (listViewFixes.Columns[0].Width + listViewFixes.Columns[1].Width +
-                                                   listViewFixes.Columns[2].Width)) / 2;
+            int newWidth = (listViewFixes.Width - (listViewFixes.Columns[0].Width + listViewFixes.Columns[1].Width)) / 2;
+            listViewFixes.Columns[2].Width = newWidth;
             listViewFixes.Columns[3].Width = newWidth;
-            listViewFixes.Columns[4].Width = newWidth;
         }
 
         private void CheckBoxMoods_CheckedChanged(object sender, EventArgs e)
@@ -346,33 +327,28 @@ namespace Nikse.SubtitleEdit.PluginLogic
             GeneratePreview();
         }
 
-        private void CheckBoxSingleLineNarrator_CheckedChanged(object sender, EventArgs e)
+        private ICollection<IStyleCommand> GetCommands()
         {
-            GeneratePreview();
-        }
-
-        private ICollection<ICommand> GetCommands()
-        {
-            var commands = new List<ICommand>();
+            var commands = new List<IStyleCommand>();
             if (checkBoxRemoveSpaces.Checked)
             {
-                commands.Add(new RemoveExtraSpaceCommand());
+                commands.Add(new RemoveExtraSpaceStyleCommand());
             }
 
             if (checkBoxMoods.Checked)
             {
-                commands.Add(new StyleMoodsCommand(GetStrategy()));
+                commands.Add(new StyleMoodsStyleCommand(GetStrategy()));
             }
 
             if (checkBoxNames.Checked)
             {
-                commands.Add(new StyleNarratorCommand(GetStrategy()));
+                commands.Add(new StyleNarratorStyleCommand(GetStrategy()));
             }
 
             return commands;
         }
 
-        private IStrategy GetStrategy() => (IStrategy) comboBoxStyle.SelectedItem;
+        private ICaseStrategy GetStrategy() => (ICaseStrategy)comboBoxStyle.SelectedItem;
 
         public void LoadConfigurations()
         {
@@ -434,21 +410,6 @@ namespace Nikse.SubtitleEdit.PluginLogic
             // the binding is becoming complicated at this point, because we bound Paragraph.Text => textBoxParagraphText.Text
         }
 
-        private void ButtonItalic_Click(object sender, EventArgs e)
-        {
-            SetTag("<i>");
-        }
-
-        private void ButtonBold_Click(object sender, EventArgs e)
-        {
-            SetTag("<b>");
-        }
-
-        private void ButtonUnderline_Click(object sender, EventArgs e)
-        {
-            SetTag("<u>");
-        }
-
         private void SetTag(string tag)
         {
             if (listViewFixes.SelectedItems.Count == 0)
@@ -475,6 +436,11 @@ namespace Nikse.SubtitleEdit.PluginLogic
             //}
 
             listViewFixes.EndUpdate();
+        }
+
+        private void buttonConvert_MouseCaptureChanged(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

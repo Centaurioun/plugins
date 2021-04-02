@@ -4,19 +4,19 @@ using Nikse.SubtitleEdit.PluginLogic.Strategies;
 
 namespace Nikse.SubtitleEdit.PluginLogic.Commands
 {
-    public class StyleMoodsCommand : ICommand
+    public class StyleMoodsStyleCommand : IStyleCommand
     {
         private static readonly char[] Symbols = {'.', '!', '?', ')', ']'};
         private static readonly char[] HiChars = {'(', '['};
 
-        private IStrategy Strategy { get; }
+        private ICaseStrategy CaseStrategy { get; }
 
-        public StyleMoodsCommand(IStrategy strategy)
+        public StyleMoodsStyleCommand(ICaseStrategy caseStrategy)
         {
-            Strategy = strategy;
+            CaseStrategy = caseStrategy;
         }
 
-        public void Convert(IList<Paragraph> paragraphs, IController controller)
+        public void Convert(IList<Paragraph> paragraphs, ICaseController caseController)
         {
             foreach (var paragraph in paragraphs)
             {
@@ -25,14 +25,14 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                 // doesn't have balanced brackets. O(2n)
                 if (!(HasBalancedParentheses(text) && HasBalancedBrackets(text)))
                 {
-                    controller.AddResult(text, text, "Line contains unbalanced []/()", paragraph);
+                    caseController.AddResult(text, text, "Line contains unbalanced []/()", paragraph);
                 }
 
                 string output = MoodsToUppercase(text);
 
                 if (!output.Equals(paragraph.Text, StringComparison.Ordinal))
                 {
-                    controller.AddResult(paragraph.Text, output, "Moods", paragraph);
+                    caseController.AddResult(paragraph.Text, output, "Moods", paragraph);
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                 else
                 {
                     string textBetween = moodText.Substring(1, moodText.Length - 2);
-                    text = text.Insert(idx, $"{moodText[0]}{Strategy.Execute(textBetween)}{moodText[moodText.Length-1]}");
+                    text = text.Insert(idx, $"{moodText[0]}{CaseStrategy.Execute(textBetween)}{moodText[moodText.Length-1]}");
                     idx = text.IndexOf(openChar, endIdx + 1); // ( or [
                 }
             } while (idx >= 0);
@@ -93,7 +93,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                 }
                 else if (ch == '(' && j > i)
                 {
-                    string textInRange = Strategy.Execute(text.Substring(i + 1, j - i - 1));
+                    string textInRange = CaseStrategy.Execute(text.Substring(i + 1, j - i - 1));
                     text = text.Remove(i, j + 1 - i).Insert(i, textInRange);
                     j = -1;
                 }

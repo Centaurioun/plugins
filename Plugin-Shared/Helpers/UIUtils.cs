@@ -4,10 +4,10 @@ using System.Text;
 
 namespace Nikse.SubtitleEdit.PluginLogic.Helpers
 {
-    public class UIUtils
+    public class UiUtils
     {
-        public static string GetListViewTextFromString(string s) => s.Replace(Environment.NewLine, Options.UILineBreak);
+        public static string GetListViewTextFromString(string s) => s.Replace(Environment.NewLine, Options.UiLineBreak);
 
-        public static string GetStringFromListViewText(string lviText) => lviText.Replace(Options.UILineBreak, Environment.NewLine);
+        public static string GetStringFromListViewText(string lviText) => lviText.Replace(Options.UiLineBreak, Environment.NewLine);
     }
 }

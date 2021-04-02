@@ -164,7 +164,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
             return s;
         }
 
-        public static string GetListViewString(string text, bool noTag)
+        public static string GetListViewString(string text, bool noTag = false)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -178,7 +178,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
             {
                 text = HtmlUtils.RemoveTags(text, true);
             }
-            return text.Replace(Environment.NewLine, Options.UILineBreak);
+            return text.Replace(Environment.NewLine, Options.UiLineBreak);
         }
     }
 }

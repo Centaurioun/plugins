@@ -35,7 +35,6 @@
             this.listViewFixes = new System.Windows.Forms.ListView();
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -52,15 +51,7 @@
             this.buttonApply = new System.Windows.Forms.Button();
             this.checkBoxRemoveSpaces = new System.Windows.Forms.CheckBox();
             this.checkBoxMoods = new System.Windows.Forms.CheckBox();
-            this.checkBoxSingleLineNarrator = new System.Windows.Forms.CheckBox();
             this.groupBoxOptions = new System.Windows.Forms.GroupBox();
-            this.textBoxParagraphText = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.buttonPrev = new System.Windows.Forms.Button();
-            this.buttonNext = new System.Windows.Forms.Button();
-            this.buttonItalic = new System.Windows.Forms.Button();
-            this.buttonBold = new System.Windows.Forms.Button();
-            this.buttonUnderline = new System.Windows.Forms.Button();
             this.pictureBoxDonate = new System.Windows.Forms.PictureBox();
             this.contextMenuStrip1.SuspendLayout();
             this.groupBoxOptions.SuspendLayout();
@@ -103,6 +94,7 @@
             this.buttonConvert.TabIndex = 0;
             this.buttonConvert.Text = "&OK";
             this.buttonConvert.Click += new System.EventHandler(this.Btn_Run_Click);
+            this.buttonConvert.MouseCaptureChanged += new System.EventHandler(this.buttonConvert_MouseCaptureChanged);
             // 
             // listViewFixes
             // 
@@ -115,7 +107,6 @@
             this.listViewFixes.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader4,
             this.columnHeader1,
-            this.columnHeader5,
             this.columnHeader2,
             this.columnHeader3});
             this.listViewFixes.ContextMenuStrip = this.contextMenuStrip1;
@@ -143,11 +134,6 @@
             // 
             this.columnHeader1.Text = "Line #";
             this.columnHeader1.Width = 50;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Match";
-            this.columnHeader5.Width = 81;
             // 
             // columnHeader2
             // 
@@ -302,26 +288,11 @@
             this.checkBoxMoods.UseVisualStyleBackColor = true;
             this.checkBoxMoods.CheckedChanged += new System.EventHandler(this.CheckBoxMoods_CheckedChanged);
             // 
-            // checkBoxSingleLineNarrator
-            // 
-            this.checkBoxSingleLineNarrator.AutoSize = true;
-            this.checkBoxSingleLineNarrator.Checked = true;
-            this.checkBoxSingleLineNarrator.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxSingleLineNarrator.Location = new System.Drawing.Point(302, 59);
-            this.checkBoxSingleLineNarrator.Margin = new System.Windows.Forms.Padding(4);
-            this.checkBoxSingleLineNarrator.Name = "checkBoxSingleLineNarrator";
-            this.checkBoxSingleLineNarrator.Size = new System.Drawing.Size(249, 19);
-            this.checkBoxSingleLineNarrator.TabIndex = 11;
-            this.checkBoxSingleLineNarrator.Text = "Lena:<br/>A ring?! => LENA:<br/>A ring?!";
-            this.checkBoxSingleLineNarrator.UseVisualStyleBackColor = true;
-            this.checkBoxSingleLineNarrator.CheckedChanged += new System.EventHandler(this.CheckBoxSingleLineNarrator_CheckedChanged);
-            // 
             // groupBoxOptions
             // 
             this.groupBoxOptions.BackColor = System.Drawing.Color.Transparent;
             this.groupBoxOptions.Controls.Add(this.checkBoxNames);
             this.groupBoxOptions.Controls.Add(this.checkBoxRemoveSpaces);
-            this.groupBoxOptions.Controls.Add(this.checkBoxSingleLineNarrator);
             this.groupBoxOptions.Controls.Add(this.checkBoxMoods);
             this.groupBoxOptions.Location = new System.Drawing.Point(14, 14);
             this.groupBoxOptions.Margin = new System.Windows.Forms.Padding(4);
@@ -331,81 +302,6 @@
             this.groupBoxOptions.TabIndex = 12;
             this.groupBoxOptions.TabStop = false;
             this.groupBoxOptions.Text = "Options:";
-            // 
-            // textBoxParagraphText
-            // 
-            this.textBoxParagraphText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.textBoxParagraphText.Location = new System.Drawing.Point(16, 512);
-            this.textBoxParagraphText.Multiline = true;
-            this.textBoxParagraphText.Name = "textBoxParagraphText";
-            this.textBoxParagraphText.Size = new System.Drawing.Size(297, 42);
-            this.textBoxParagraphText.TabIndex = 13;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 489);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(75, 15);
-            this.label1.TabIndex = 14;
-            this.label1.Text = "Paragraph #";
-            // 
-            // buttonPrev
-            // 
-            this.buttonPrev.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonPrev.Location = new System.Drawing.Point(318, 532);
-            this.buttonPrev.Name = "buttonPrev";
-            this.buttonPrev.Size = new System.Drawing.Size(66, 22);
-            this.buttonPrev.TabIndex = 15;
-            this.buttonPrev.Text = "Prev";
-            this.buttonPrev.UseVisualStyleBackColor = true;
-            // 
-            // buttonNext
-            // 
-            this.buttonNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonNext.Location = new System.Drawing.Point(318, 512);
-            this.buttonNext.Name = "buttonNext";
-            this.buttonNext.Size = new System.Drawing.Size(66, 22);
-            this.buttonNext.TabIndex = 15;
-            this.buttonNext.Text = "Next";
-            this.buttonNext.UseVisualStyleBackColor = true;
-            // 
-            // buttonItalic
-            // 
-            this.buttonItalic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonItalic.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonItalic.Location = new System.Drawing.Point(168, 489);
-            this.buttonItalic.Name = "buttonItalic";
-            this.buttonItalic.Size = new System.Drawing.Size(45, 22);
-            this.buttonItalic.TabIndex = 16;
-            this.buttonItalic.Text = "I";
-            this.buttonItalic.UseVisualStyleBackColor = true;
-            this.buttonItalic.Click += new System.EventHandler(this.ButtonItalic_Click);
-            // 
-            // buttonBold
-            // 
-            this.buttonBold.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonBold.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonBold.Location = new System.Drawing.Point(218, 489);
-            this.buttonBold.Name = "buttonBold";
-            this.buttonBold.Size = new System.Drawing.Size(45, 22);
-            this.buttonBold.TabIndex = 16;
-            this.buttonBold.Text = "B";
-            this.buttonBold.UseVisualStyleBackColor = true;
-            this.buttonBold.Click += new System.EventHandler(this.ButtonBold_Click);
-            // 
-            // buttonUnderline
-            // 
-            this.buttonUnderline.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonUnderline.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonUnderline.Location = new System.Drawing.Point(268, 489);
-            this.buttonUnderline.Name = "buttonUnderline";
-            this.buttonUnderline.Size = new System.Drawing.Size(45, 22);
-            this.buttonUnderline.TabIndex = 16;
-            this.buttonUnderline.Text = "U";
-            this.buttonUnderline.UseVisualStyleBackColor = true;
-            this.buttonUnderline.Click += new System.EventHandler(this.ButtonUnderline_Click);
             // 
             // pictureBoxDonate
             // 
@@ -428,13 +324,6 @@
             this.ClientSize = new System.Drawing.Size(861, 599);
             this.Controls.Add(this.pictureBoxDonate);
             this.Controls.Add(this.listViewFixes);
-            this.Controls.Add(this.buttonUnderline);
-            this.Controls.Add(this.buttonBold);
-            this.Controls.Add(this.buttonItalic);
-            this.Controls.Add(this.buttonNext);
-            this.Controls.Add(this.buttonPrev);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBoxParagraphText);
             this.Controls.Add(this.groupBoxOptions);
             this.Controls.Add(this.buttonApply);
             this.Controls.Add(this.linkLabel1);
@@ -483,19 +372,10 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.ToolStripMenuItem copyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteLineToolStripMenuItem;
-        private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.Button buttonApply;
         private System.Windows.Forms.CheckBox checkBoxRemoveSpaces;
         private System.Windows.Forms.CheckBox checkBoxMoods;
-        private System.Windows.Forms.CheckBox checkBoxSingleLineNarrator;
         private System.Windows.Forms.GroupBox groupBoxOptions;
-        private System.Windows.Forms.TextBox textBoxParagraphText;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button buttonPrev;
-        private System.Windows.Forms.Button buttonNext;
-        private System.Windows.Forms.Button buttonItalic;
-        private System.Windows.Forms.Button buttonBold;
-        private System.Windows.Forms.Button buttonUnderline;
         private System.Windows.Forms.PictureBox pictureBoxDonate;
     }
 }

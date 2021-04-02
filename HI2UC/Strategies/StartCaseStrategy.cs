@@ -2,9 +2,9 @@
 
 namespace Nikse.SubtitleEdit.PluginLogic.Strategies
 {
-    public class TitleWordsStrategy : IStrategy
+    public class StartCaseStrategy : ICaseStrategy
     {
-        public string Name => "Title words";
+        public string Name => "Start case";
 
         public string Execute(string input)
         {

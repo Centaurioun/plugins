@@ -4,9 +4,9 @@ using Nikse.SubtitleEdit.PluginLogic.Strategies;
 
 namespace Nikse.SubtitleEdit.PluginLogic.Commands
 {
-    public class RemoveExtraSpaceCommand : ICommand
+    public class RemoveExtraSpaceStyleCommand : IStyleCommand
     {
-        public void Convert(IList<Paragraph> paragraph, IController controller)
+        public void Convert(IList<Paragraph> paragraph, ICaseController caseController)
         {
             return;
         }

@@ -2,11 +2,11 @@
 
 namespace Nikse.SubtitleEdit.PluginLogic.Strategies
 {
-    public class Controller : IController
+    public class CaseController : ICaseController
     {
         public IList<Record> Records { get; }
 
-        public Controller()
+        public CaseController()
         {
             Records = new List<Record>();
         }

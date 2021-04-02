@@ -1,6 +1,6 @@
 ﻿namespace Nikse.SubtitleEdit.PluginLogic.Strategies
 {
-    public class UppercaseStrategy : IStrategy
+    public class UpperCaseStrategy : ICaseStrategy
     {
         public string Name => "Uppercase";
         

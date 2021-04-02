@@ -54,11 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\ICommand.cs" />
-    <Compile Include="Commands\RemoveExtraSpaceCommand.cs" />
-    <Compile Include="Commands\StyleMoodsCommand.cs" />
-    <Compile Include="Commands\StyleNarratorCommand.cs" />
-    <Compile Include="Context.cs" />
+    <Compile Include="Commands\IStyleCommand.cs" />
+    <Compile Include="Commands\RemoveExtraSpaceStyleCommand.cs" />
+    <Compile Include="Commands\StyleMoodsStyleCommand.cs" />
+    <Compile Include="Commands\StyleNarratorStyleCommand.cs" />
     <Compile Include="Enums\HIStyle.cs" />
     <Compile Include="Models\HIConfigs.cs" />
     <Compile Include="Models\Record.cs" />
@@ -75,15 +74,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Strategies\Controller.cs" />
-    <Compile Include="Strategies\IController.cs" />
-    <Compile Include="Strategies\IStrategy.cs" />
-    <Compile Include="Strategies\LowercaseStrategy.cs" />
-    <Compile Include="Strategies\NoneStrategy.cs" />
-    <Compile Include="Strategies\TitlecaseStrategy.cs" />
-    <Compile Include="Strategies\TitleWordsStrategy.cs" />
-    <Compile Include="Strategies\UppercaseStrategy.cs" />
-    <Compile Include="Strategies\UpperLowercase.cs" />
+    <Compile Include="Strategies\CaseController.cs" />
+    <Compile Include="Strategies\ICaseController.cs" />
+    <Compile Include="Strategies\ICaseStrategy.cs" />
+    <Compile Include="Strategies\LowerCaseStrategy.cs" />
+    <Compile Include="Strategies\NoneCaseStrategy.cs" />
+    <Compile Include="Strategies\SentenceCaseStrategy.cs" />
+    <Compile Include="Strategies\StartCaseStrategy.cs" />
+    <Compile Include="Strategies\UpperCaseStrategy.cs" />
+    <Compile Include="Strategies\TongleCaseStrategy.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginForm.resx">

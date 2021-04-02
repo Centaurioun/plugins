@@ -2,9 +2,9 @@
 
 namespace Nikse.SubtitleEdit.PluginLogic.Strategies
 {
-    public class UpperLowercase : IStrategy
+    public class TongleCaseStrategy : ICaseStrategy
     {
-        public string Name => "UpperLower case";
+        public string Name => "Tongle case";
 
         public string Execute(string input)
         {

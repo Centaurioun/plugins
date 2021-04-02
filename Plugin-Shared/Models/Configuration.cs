@@ -10,7 +10,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
 {
     public abstract class Configuration<TConfig>
     {
-        private static readonly BindingFlags _bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
+        private static readonly BindingFlags BindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
         // NOTE: XmlSerializer sucks :(!
         //private static readonly XmlSerializer _serializer;
@@ -29,7 +29,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
             //}
 
             Type type = GetType();
-            PropertyInfo[] properties = type.GetProperties(_bindingFlags);
+            PropertyInfo[] properties = type.GetProperties(BindingFlags);
 
             var xmlWriterSettings = new XmlWriterSettings()
             {
@@ -100,7 +100,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
 
                             // this is the name of the property that the value will be set
                             string localName = xmlReader.LocalName;
-                            PropertyInfo propInfo = type.GetProperty(localName, _bindingFlags);
+                            PropertyInfo propInfo = type.GetProperty(localName, BindingFlags);
 
                             // propperty not defined
                             if (propInfo == null)

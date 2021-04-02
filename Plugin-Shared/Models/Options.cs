@@ -5,10 +5,10 @@
         static Options()
         {
             Frame = 23.976;
-            UILineBreak = "<br />";
+            UiLineBreak = "<br />";
         }
 
         public static double Frame { get; set; }
-        public static string UILineBreak { get; set; }
+        public static string UiLineBreak { get; set; }
     }
 }
