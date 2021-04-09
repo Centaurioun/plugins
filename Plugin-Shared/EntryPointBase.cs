@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Nikse.SubtitleEdit.PluginLogic
@@ -15,7 +13,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
         public string Shortcut { get; }
 
         private IList<string> _lines;
-        protected Subtitle _subtitle;
+        protected Subtitle Subtitle;
 
         protected EntryPointBase(string name, string text, decimal version, string description, string actionType, string shortcut)
         {
@@ -33,13 +31,13 @@ namespace Nikse.SubtitleEdit.PluginLogic
         {
             if (!string.IsNullOrEmpty(uiLineBreak))
             {
-                Options.UILineBreak = uiLineBreak;
+                Options.UiLineBreak = uiLineBreak;
             }
 
             _lines = new List<string>(srtText.SplitToLines());
             var subrip = new SubRip();
-            _subtitle = new Subtitle(subrip);
-            subrip.LoadSubtitle(_subtitle, _lines, file);
+            Subtitle = new Subtitle(subrip);
+            subrip.LoadSubtitle(Subtitle, _lines, file);
         }
     }
 }

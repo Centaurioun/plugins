@@ -94,7 +94,6 @@
             this.buttonConvert.TabIndex = 0;
             this.buttonConvert.Text = "&OK";
             this.buttonConvert.Click += new System.EventHandler(this.Btn_Run_Click);
-            this.buttonConvert.MouseCaptureChanged += new System.EventHandler(this.buttonConvert_MouseCaptureChanged);
             // 
             // listViewFixes
             // 
@@ -223,7 +222,6 @@
             this.comboBoxStyle.Name = "comboBoxStyle";
             this.comboBoxStyle.Size = new System.Drawing.Size(178, 23);
             this.comboBoxStyle.TabIndex = 2;
-            this.comboBoxStyle.SelectedIndexChanged += new System.EventHandler(this.ComboBoxStyle_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -272,7 +270,6 @@
             this.checkBoxRemoveSpaces.TabIndex = 9;
             this.checkBoxRemoveSpaces.Text = "Remove Extra Spaces \'( music )\' => (music)";
             this.checkBoxRemoveSpaces.UseVisualStyleBackColor = true;
-            this.checkBoxRemoveSpaces.CheckedChanged += new System.EventHandler(this.CheckBoxRemoveSpaces_CheckedChanged);
             // 
             // checkBoxMoods
             // 
@@ -286,7 +283,6 @@
             this.checkBoxMoods.TabIndex = 10;
             this.checkBoxMoods.Text = "Moods. e.g: (foobar) => (FOOBAR)";
             this.checkBoxMoods.UseVisualStyleBackColor = true;
-            this.checkBoxMoods.CheckedChanged += new System.EventHandler(this.CheckBoxMoods_CheckedChanged);
             // 
             // groupBoxOptions
             // 

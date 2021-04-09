@@ -10,7 +10,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Strategies
         {
             Records = new List<Record>();
         }
-
+        
         public void AddResult(string before, string after, string comment, Paragraph p)
         {
             Records.Add(new Record

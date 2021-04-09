@@ -6,30 +6,29 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
 {
     public class StyleNarratorStyleCommand : IStyleCommand
     {
-        private static readonly char[] LineCloseChars = {'!', '?', '¿', '¡'};
-        private static readonly char[] Symbols = {'.', '!', '?', ')', ']'};
+        private static readonly char[] CloseChars = {']', ')', '>', '.', '?', '!', '}', '¿', '¡'};
 
-        public ICaseStrategy CaseStrategy { get; }
+        private ICaseStrategy CaseStrategy { get; }
 
         public StyleNarratorStyleCommand(ICaseStrategy caseStrategy)
         {
             CaseStrategy = caseStrategy;
         }
 
-        public void Convert(IList<Paragraph> paragraph, ICaseController caseController)
+        public void Convert(IList<Paragraph> paragraphs, ICaseController caseController)
         {
-            foreach (var p in paragraph)
+            foreach (var paragraph in paragraphs)
             {
-                string input = p.Text;
-                string output = NarratorToUppercase(p.Text);
-                if (!input.Equals(output, StringComparison.Ordinal))
+                string output = Convert(paragraph.Text);
+                if (!paragraph.Text.Equals(output, StringComparison.Ordinal))
                 {
-                    caseController.AddResult(input, output, "Narrator converted", p);
+                    caseController.AddResult(paragraph.Text, output, "Narrator converted", paragraph);
+                    paragraph.Text = output;
                 }
             }
         }
 
-        public string NarratorToUppercase(string text)
+        private string Convert(string text)
         {
             string noTagText = HtmlUtils.RemoveTags(text, true).TrimEnd().TrimEnd('"');
 
@@ -39,15 +38,13 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
             }
 
             // Skip single line that ends with ':'.
-            int index = noTagText.IndexOf(':');
-            if (index < 0)
+            if (noTagText.IndexOf(':') < 0)
             {
                 return text;
             }
 
             // Lena:
             // A ring?!
-            int newLineIdx = noTagText.IndexOf(Environment.NewLine, StringComparison.Ordinal);
 
             // todo: handle
             //if (!Config.SingleLineNarrator && index + 1 == newLineIdx)
@@ -61,25 +58,37 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
                 string line = lines[i];
                 string noTagLine = HtmlUtils.RemoveTags(line, true);
 
-                int colonIdx = noTagLine.IndexOf(':');
-                if (colonIdx < 1)
+                int noTagColonIdx = noTagLine.IndexOf(':');
+                if (noTagColonIdx < 1)
                 {
                     continue;
                 }
 
                 // Only allow colon at last position if it's 1st line.
-                if (colonIdx + 1 == noTagLine.Length)
+                if (noTagColonIdx + 1 == noTagLine.Length && i + 1 == lines.Length)
                 {
                     continue;
                 }
 
-                if (IsQualifiedNarrator(noTagLine, colonIdx))
+                if (!IsQualifiedNarrator(noTagLine, noTagColonIdx))
                 {
-                    // Find index from original text.
-                    colonIdx = line.IndexOf(':') + 1;
-                    string preText = line.Substring(0, colonIdx);
-                    preText = CaseStrategy.Execute(preText);
-                    lines[i] = preText + line.Substring(colonIdx);
+                    continue;
+                }
+
+                // Find index from original text.
+                int colonIdx = line.IndexOf(':');
+
+                // [foobar] Narrator: Hello world!
+                int startIdx = Math.Max(0, line.LastIndexOfAny(CloseChars, colonIdx) + 1);
+
+                // skip white-spaces
+                while (startIdx < colonIdx && line[startIdx] == ' ') startIdx++;
+
+                if (startIdx < colonIdx)
+                {
+                    var narrator = line.Substring(startIdx, colonIdx - startIdx);
+                    lines[i] = (startIdx > 0 ? line.Substring(0, startIdx) : string.Empty) +
+                               CaseStrategy.Execute(narrator) + line.Substring(colonIdx);
                 }
             }
 
@@ -124,38 +133,38 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
             return text;
         }
 
-        private static bool IsQualifiedNarrator(string noTagsLine, int colonIdx)
+        private static bool IsQualifiedNarrator(string noTagsLine, int noTagColon)
         {
-            string noTagCapturedText = noTagsLine.Substring(0, colonIdx + 1);
-            if (string.IsNullOrWhiteSpace(noTagCapturedText))
+            int symbolIndex = Math.Max(noTagsLine.LastIndexOfAny(CloseChars, noTagColon), 0);
+            string potentialNarrator = noTagsLine.Substring(symbolIndex + 1, noTagColon - symbolIndex).TrimStart();
+            if (string.IsNullOrWhiteSpace(potentialNarrator))
             {
                 return false;
             }
 
-            // e.g: 12:30am...
-            if (colonIdx + 1 < noTagsLine.Length)
+            if (noTagColon + 1 < noTagsLine.Length)
             {
-                char charAfterColon = noTagsLine[colonIdx + 1];
-                if (char.IsDigit(charAfterColon))
+                // e.g: 12:30am...
+                if (char.IsDigit(noTagsLine[noTagColon + 1]) && noTagColon - 1 >= 0 &&
+                    char.IsDigit(noTagsLine[noTagColon - 1]))
                 {
                     return false;
                 }
 
                 // slash after https://
-                if (charAfterColon == '/')
+                if (noTagsLine[noTagColon + 1] == '/')
                 {
                     return false;
                 }
             }
 
             // ignore: - where it's safest. BRAN: No.
-            int symbolIdx = noTagCapturedText.LastIndexOfAny(Symbols, colonIdx);
-            if (symbolIdx > 0)
+            if (symbolIndex > 0)
             {
                 // text before symbol
-                string preText = noTagCapturedText.Substring(0, symbolIdx).Trim();
+                string preText = noTagsLine.Substring(0, symbolIndex + 1).Trim();
                 // text after symbols exclude colon
-                string textAfterSymbols = noTagCapturedText.Substring(symbolIdx + 1, colonIdx - symbolIdx - 1).Trim();
+                string textAfterSymbols = noTagsLine.Substring(symbolIndex + 1, noTagColon - symbolIndex - 1).Trim();
 
                 // post symbol is uppercase - pre unnecessary
                 if (textAfterSymbols.Equals(textAfterSymbols.ToUpper()) && preText.Equals(preText.ToUpper()) == false)
@@ -166,12 +175,12 @@ namespace Nikse.SubtitleEdit.PluginLogic.Commands
 
             // Foobar[?!] Narrator: Hello (Note: not really sure if "." (dot) should be include since there are names
             // that are prefixed with Mr. Ivandro Ismael)
-            return !noTagCapturedText.ContainsAny(LineCloseChars) &&
-                   (!noTagCapturedText.StartsWith("http", StringComparison.OrdinalIgnoreCase) &&
-                    !noTagCapturedText.EndsWith("improved by", StringComparison.OrdinalIgnoreCase) &&
-                    !noTagCapturedText.EndsWith("corrected by", StringComparison.OrdinalIgnoreCase) &&
-                    !noTagCapturedText.EndsWith("https", StringComparison.OrdinalIgnoreCase) &&
-                    !noTagCapturedText.EndsWith("http", StringComparison.OrdinalIgnoreCase));
+            return !potentialNarrator.ContainsAny(CloseChars) &&
+                   !potentialNarrator.StartsWith("http", StringComparison.OrdinalIgnoreCase) &&
+                   !potentialNarrator.EndsWith("improved by", StringComparison.OrdinalIgnoreCase) &&
+                   !potentialNarrator.EndsWith("corrected by", StringComparison.OrdinalIgnoreCase) &&
+                   !potentialNarrator.EndsWith("https", StringComparison.OrdinalIgnoreCase) &&
+                   !potentialNarrator.EndsWith("http", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

@@ -19,6 +19,15 @@ namespace Nikse.SubtitleEdit.PluginLogic
         {
         }
 
+        public Paragraph(Paragraph paragraph)
+        {
+            Id = paragraph.Id;
+            Number = paragraph.Number;
+            Text = paragraph.Text;
+            StartTime = paragraph.StartTime;
+            EndTime = paragraph.EndTime;
+        }
+
         public Paragraph(TimeCode startTime, TimeCode endTime, string text)
         {
             Id = Guid.NewGuid().ToString();

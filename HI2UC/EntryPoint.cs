@@ -49,8 +49,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
             Version = decimal.Parse(assemblyName.Version.ToString(2), System.Globalization.CultureInfo.InvariantCulture);
             Shortcut = string.Empty;
         }
-
-
+        
         public string DoAction(Form parentForm, string srtText, double frame, string uiLineBreak, string file,
             string videoFile, string rawText)
         {
