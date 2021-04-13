@@ -22,7 +22,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
 
             if (!string.IsNullOrEmpty(listViewLineSeparatorString))
             {
-                Options.UILineBreak = listViewLineSeparatorString;
+                Options.UiLineBreak = listViewLineSeparatorString;
             }
 
             var list = subtitle.SplitToLines();

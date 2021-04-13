@@ -14,7 +14,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
         {
             Init(srtText, uiLineBreak, file);
 
-            using (var main = new Main(_subtitle))
+            using (var main = new Main(Subtitle))
             {
                 if (main.ShowDialog() == DialogResult.OK)
                 {

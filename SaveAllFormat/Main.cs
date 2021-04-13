@@ -58,10 +58,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
 
             comboBoxExtension.BeginUpdate();
             comboBoxExtension.Items.Add("all");
-            foreach (var extension in GetAvailableExtensions())
-            {
-                comboBoxExtension.Items.Add(extension);
-            }
+            comboBoxExtension.Items.AddRange(GetAvailableExtensions().ToArray());
             comboBoxExtension.SelectedIndex = 0;
             comboBoxExtension.EndUpdate();
         }

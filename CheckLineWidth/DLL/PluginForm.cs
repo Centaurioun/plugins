@@ -366,9 +366,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
                     return text.Replace(Environment.NewLine, " ").Replace("  ", " ").Trim();
                 }
             }
-
-
-
+            
             var noTagText = Utilities.RemoveHtmlTags(text, true);
             // do not autobreak dialogs
             if (noTagText.Contains('-') && noTagText.Contains(Environment.NewLine, StringComparison.Ordinal))

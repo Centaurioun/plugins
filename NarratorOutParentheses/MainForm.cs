@@ -159,8 +159,8 @@ namespace Nikse.SubtitleEdit.PluginLogic
         {
             ListViewItem item = new ListViewItem { Checked = true, UseItemStyleForSubItems = true, Tag = p };
             item.SubItems.Add(p.Number.ToString());
-            item.SubItems.Add(before.Replace(Environment.NewLine, Options.UILineBreak));
-            item.SubItems.Add(after.Replace(Environment.NewLine, Options.UILineBreak));
+            item.SubItems.Add(before.Replace(Environment.NewLine, Options.UiLineBreak));
+            item.SubItems.Add(after.Replace(Environment.NewLine, Options.UiLineBreak));
             listViewFixes.Items.Add(item);
         }
 
@@ -181,7 +181,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
                     continue;
                 }
                 var p = (Paragraph)lvi.Tag;
-                p.Text = lvi.SubItems[ColumnFixedText].Text.Replace(Options.UILineBreak, Environment.NewLine);
+                p.Text = lvi.SubItems[ColumnFixedText].Text.Replace(Options.UiLineBreak, Environment.NewLine);
             }
         }
 

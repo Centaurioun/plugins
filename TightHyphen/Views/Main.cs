@@ -45,7 +45,7 @@ namespace Nikse.SubtitleEdit.PluginLogic.Views
             {
                 listViewPreview.Items.Add(new ListViewItem($"{p.Number:000}")
                 {
-                    SubItems = { UIUtils.GetListViewTextFromString(p.Text), UIUtils.GetListViewTextFromString(inp) }
+                    SubItems = { UiUtils.GetListViewTextFromString(p.Text), UiUtils.GetListViewTextFromString(inp) }
                 });
             });
 

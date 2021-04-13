@@ -46,7 +46,7 @@ namespace Nikse.SubtitleEdit.PluginLogic
 
             if (string.IsNullOrEmpty(uiLineBreak))
             {
-                Options.UILineBreak = uiLineBreak;
+                Options.UiLineBreak = uiLineBreak;
             }
 
             var list = content.SplitToLines().ToList();
